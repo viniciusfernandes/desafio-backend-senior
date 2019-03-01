@@ -37,7 +37,7 @@ Desejáveis:
 ## Enunciado
 
 Você deve desenvolver uma API REST para gerenciar um catálogo de **habitantes** e **endereços**.
-O catálogo deve ser persistido em banco de dados (em memória).
+O catálogo deve ser persistido em banco de dados (em memória - por exemplo: H2 / HSQLDB).
 Para o desenvolvimento, podem ser utilizadas quaisquer bibliotecas e frameworks, desde que a linguagem seja *Java* e utilize-se *Maven* para gerenciamento de dependências.
 
 Cada **habitante** possui 3 atributos: 
