@@ -1,5 +1,6 @@
 package br.com.brytecnologia.desafio.backend.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,16 +53,19 @@ public class HabitanteServiceImpl implements HabitanteService {
 			throw new ConflictDataException("O codigo do habitante ja esta cadastrado no sistema.");
 		}
 
-		Habitante newHabt = habitanteRepository.save(habitante);
+		habitanteRepository.save(habitante);
 		if (habitante.hasEndereco()) {
-			for (Endereco endereco : habitante.getEnderecos()) {
+			List<Endereco> enderecos = new ArrayList<>();
+			enderecos.addAll(habitante.getEnderecos());
+			habitante.clearEnderecos();
+			for (Endereco endereco : enderecos) {
 				endereco.setHabitante(habitante);
 				enderecoService.populateEndereco(endereco);
-				newHabt.addEndereco(enderecoService.save(endereco));
+				habitante.addEndereco(enderecoService.save(endereco));
 			}
 		}
 
-		return newHabt;
+		return habitante;
 	}
 
 	@Override

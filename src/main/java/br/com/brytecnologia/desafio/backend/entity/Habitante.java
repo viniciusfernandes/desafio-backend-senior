@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -21,7 +23,7 @@ public class Habitante implements Serializable {
 	@Id
 	private String codigo;
 
-	@Transient
+	@OneToMany(mappedBy = "habitante", fetch = FetchType.LAZY)
 	private List<Endereco> enderecos;
 
 	public String getNome() {
