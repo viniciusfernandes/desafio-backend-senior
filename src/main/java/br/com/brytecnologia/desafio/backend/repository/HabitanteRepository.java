@@ -19,7 +19,7 @@ public class HabitanteRepository {
 
 	public Habitante findByCodigo(String codigo) {
 		try {
-			return em.createQuery("select h from Habitante h where h.codigo=:codigo", Habitante.class)
+			return em.createQuery("select h from Habitante h LEFT JOIN FETCH h.enderecos where h.codigo=:codigo", Habitante.class)
 					.setParameter("codigo", codigo).getSingleResult();
 		} catch (NoResultException | NonUniqueResultException e) {
 			return null;
@@ -27,7 +27,7 @@ public class HabitanteRepository {
 	}
 
 	public List<Habitante> findAll() {
-		return em.createQuery("from Habitante", Habitante.class).getResultList();
+		return em.createQuery("select h from Habitante h LEFT JOIN FETCH h.enderecos", Habitante.class).getResultList();
 	}
 
 	public Habitante save(Habitante habitante) {
