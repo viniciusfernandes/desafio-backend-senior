@@ -62,4 +62,8 @@ public class Habitante implements Serializable {
 		}
 		enderecos.add(endereco);
 	}
+
+	public void clearEnderecos() {
+		setEnderecos(new ArrayList<>());
+	}
 }

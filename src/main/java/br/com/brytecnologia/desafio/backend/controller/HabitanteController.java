@@ -1,5 +1,6 @@
 package br.com.brytecnologia.desafio.backend.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.brytecnologia.desafio.backend.dto.EnderecoDTO;
+import br.com.brytecnologia.desafio.backend.dto.HabitanteDTO;
+import br.com.brytecnologia.desafio.backend.entity.Endereco;
 import br.com.brytecnologia.desafio.backend.entity.Habitante;
 import br.com.brytecnologia.desafio.backend.service.HabitanteService;
 import br.com.brytecnologia.desafio.backend.service.exception.BadFormatDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.BlanckDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.ConflictDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.InvalidDataException;
+import br.com.brytecnologia.desafio.backend.utils.EntityUtils;
 
 @CrossOrigin
 @RestController
@@ -35,28 +40,29 @@ public class HabitanteController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<List<Habitante>> findAll() {
-		return new ResponseEntity<List<Habitante>>(habitanteService.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<HabitanteDTO>> findAll() {
+		return new ResponseEntity<List<HabitanteDTO>>(convert(habitanteService.findAll()), HttpStatus.OK);
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<Habitante> findByCodigo(@PathVariable String codigo) {
+	public ResponseEntity<HabitanteDTO> findByCodigo(@PathVariable String codigo) {
 		Habitante habitante = habitanteService.findByCodigo(codigo);
 		if (habitante != null) {
-			return new ResponseEntity<Habitante>(habitante, HttpStatus.OK);
+			return new ResponseEntity<HabitanteDTO>(convert(habitante), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Habitante>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@PostMapping("")
-	public ResponseEntity<Habitante> save(@RequestBody Habitante habitante) throws BlanckDataException {
+	public ResponseEntity<HabitanteDTO> save(@RequestBody HabitanteDTO habitanteDto) throws BlanckDataException {
 		try {
-			return new ResponseEntity<Habitante>(habitanteService.save(habitante), HttpStatus.CREATED);
+			HabitanteDTO dto = convert(habitanteService.save(convert(habitanteDto)));
+			return new ResponseEntity<HabitanteDTO>(dto, HttpStatus.CREATED);
 		} catch (ConflictDataException e) {
-			return new ResponseEntity<Habitante>(HttpStatus.CONFLICT);
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.CONFLICT);
 		} catch (BlanckDataException | BadFormatDataException | InvalidDataException e) {
-			return new ResponseEntity<Habitante>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -68,5 +74,46 @@ public class HabitanteController {
 	@DeleteMapping("/{codigo}")
 	public String removerHabitante(String codigo) {
 		return null;
+	}
+
+	private HabitanteDTO convert(Habitante habitante) {
+		HabitanteDTO habitanteDto = new HabitanteDTO();
+		EntityUtils.copy(habitante, habitanteDto);
+
+		if (habitante.hasEndereco()) {
+
+			habitanteDto.clearEnderecos();
+			EnderecoDTO endDto = null;
+			for (Endereco end : habitante.getEnderecos()) {
+				endDto = new EnderecoDTO();
+				EntityUtils.copy(end, endDto);
+				habitanteDto.addEndereco(endDto);
+			}
+		}
+
+		return habitanteDto;
+	}
+
+	private List<HabitanteDTO> convert(List<Habitante> habitantes) {
+		List<HabitanteDTO> dtos = new ArrayList<>(habitantes.size());
+		habitantes.forEach(hab -> dtos.add(convert(hab)));
+		return dtos;
+	}
+
+	private Habitante convert(HabitanteDTO habitanteDto) {
+		Habitante habitante = new Habitante();
+		EntityUtils.copy(habitanteDto, habitante);
+		if (habitanteDto.hasEndereco()) {
+
+			habitante.clearEnderecos();
+			Endereco end = null;
+			for (EnderecoDTO endDto : habitanteDto.getEnderecos()) {
+				end = new Endereco();
+				EntityUtils.copy(endDto, end);
+				habitante.addEndereco(end);
+			}
+		}
+
+		return habitante;
 	}
 }
