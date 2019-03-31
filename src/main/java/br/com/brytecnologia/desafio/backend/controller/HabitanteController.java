@@ -34,12 +34,12 @@ public class HabitanteController {
 	}
 
 	@GetMapping("/{codigo}")
-	public Habitante buscarHabitante(String codigo) {
-		return null;
+	public ResponseEntity<Habitante> findByCodigo(String codigo) {
+		return new ResponseEntity<Habitante>(habitanteService.findByCodigo(codigo), HttpStatus.OK);
 	}
 
 	@PostMapping("")
-	public String inserirHabitante(Habitante habitante) {
+	public String save(Habitante habitante) {
 		return null;
 	}
 

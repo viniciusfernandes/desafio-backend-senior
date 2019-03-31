@@ -13,6 +13,7 @@ import br.com.brytecnologia.desafio.backend.entity.Habitante;
 
 @Repository
 public class HabitanteRepository {
+
 	@PersistenceContext
 	private EntityManager em;
 
@@ -26,6 +27,11 @@ public class HabitanteRepository {
 	}
 
 	public List<Habitante> findAll() {
-		return em.createQuery("select * from Habitante ", Habitante.class).getResultList();
+		return em.createQuery("from Habitante", Habitante.class).getResultList();
 	}
+
+	public String save(Habitante habitante) {
+		return em.merge(habitante).getCodigo();
+	}
+
 }
