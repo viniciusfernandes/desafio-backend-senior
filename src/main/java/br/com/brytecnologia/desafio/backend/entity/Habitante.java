@@ -52,4 +52,7 @@ public class Habitante implements Serializable {
 		return codigo != null && codigo.trim().length() > 0;
 	}
 
+	public boolean hasEndereco() {
+		return enderecos != null && !enderecos.isEmpty();
+	}
 }

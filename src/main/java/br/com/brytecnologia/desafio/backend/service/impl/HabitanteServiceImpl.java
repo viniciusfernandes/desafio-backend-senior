@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.brytecnologia.desafio.backend.entity.Endereco;
 import br.com.brytecnologia.desafio.backend.entity.Habitante;
 import br.com.brytecnologia.desafio.backend.repository.HabitanteRepository;
+import br.com.brytecnologia.desafio.backend.service.EnderecoService;
 import br.com.brytecnologia.desafio.backend.service.HabitanteService;
 
 @Service
@@ -16,8 +18,11 @@ public class HabitanteServiceImpl implements HabitanteService {
 
 	private HabitanteRepository habitanteRepository;
 
+	private EnderecoService enderecoService;
+
 	@Autowired
-	public HabitanteServiceImpl(HabitanteRepository habitanteRepository) {
+	public HabitanteServiceImpl(EnderecoService enderecoService, HabitanteRepository habitanteRepository) {
+		this.enderecoService = enderecoService;
 		this.habitanteRepository = habitanteRepository;
 	}
 
@@ -33,15 +38,23 @@ public class HabitanteServiceImpl implements HabitanteService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public Habitante save(Habitante habitante) throws BlanckDataException, InvalidDataException {
+	public Habitante save(Habitante habitante) throws BlanckDataException, ConflictDataException, InvalidDataException {
 		if (habitante == null) {
 			throw new BlanckDataException("O habitante nao pode ser nulo.");
 		} else if (!habitante.hasCodigo()) {
 			throw new BlanckDataException("O codigo do habitante eh obrigatorio.");
 		} else if (isCodigoExistente(habitante.getCodigo())) {
-			throw new InvalidDataException("O codigo do habitante ja esta cadastrado no sistema.");
+			throw new ConflictDataException("O codigo do habitante ja esta cadastrado no sistema.");
 		}
-		return habitanteRepository.save(habitante);
+
+		if (habitante.hasEndereco()) {
+			for (Endereco endereco : habitante.getEnderecos()) {
+				enderecoService.populateEndereco(endereco);
+			}
+		}
+
+		habitanteRepository.save(habitante);
+		return habitante;
 	}
 
 	@Override

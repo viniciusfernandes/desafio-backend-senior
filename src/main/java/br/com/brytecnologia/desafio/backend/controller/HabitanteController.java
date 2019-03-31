@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.brytecnologia.desafio.backend.entity.Habitante;
 import br.com.brytecnologia.desafio.backend.service.HabitanteService;
 import br.com.brytecnologia.desafio.backend.service.impl.BlanckDataException;
+import br.com.brytecnologia.desafio.backend.service.impl.ConflictDataException;
 import br.com.brytecnologia.desafio.backend.service.impl.InvalidDataException;
 
 @CrossOrigin
@@ -52,10 +53,10 @@ public class HabitanteController {
 			return new ResponseEntity<Habitante>(habitanteService.save(habitante), HttpStatus.CREATED);
 		} catch (BlanckDataException e) {
 			return new ResponseEntity<Habitante>(HttpStatus.BAD_REQUEST);
-
-		} catch (InvalidDataException e) {
+		} catch (ConflictDataException e) {
 			return new ResponseEntity<Habitante>(HttpStatus.CONFLICT);
-
+		} catch (InvalidDataException e) {
+			return new ResponseEntity<Habitante>(HttpStatus.BAD_REQUEST);
 		}
 	}
 

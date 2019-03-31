@@ -25,7 +25,7 @@ public class Endereco implements Serializable {
 	private Habitante habitante;
 	private String bairro;
 	private String logradouro;
-	private String cep;
+	private String codigoPostal;
 	private Integer numero;
 	private String complemento;
 	private String localizacao;
@@ -37,6 +37,14 @@ public class Endereco implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getCodigoPostal() {
+		return codigoPostal;
+	}
+
+	public void setCodigoPostal(String codigoPostal) {
+		this.codigoPostal = codigoPostal;
 	}
 
 	public Habitante getHabitante() {
@@ -61,14 +69,6 @@ public class Endereco implements Serializable {
 
 	public void setLogradouro(String logradouro) {
 		this.logradouro = logradouro;
-	}
-
-	public String getCep() {
-		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
 	}
 
 	public Integer getNumero() {
@@ -102,4 +102,9 @@ public class Endereco implements Serializable {
 	public void setUf(String uf) {
 		this.uf = uf;
 	}
+
+	public boolean hasCodigoPostal() {
+		return codigoPostal != null && codigoPostal.trim().length() > 0;
+	}
+
 }
