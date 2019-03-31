@@ -12,8 +12,8 @@ public class EnderecoRepository {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Integer save(Endereco endereco) {
+	public Endereco save(Endereco endereco) {
 		em.persist(endereco);
-		return endereco.getId();
+		return endereco;
 	}
 }

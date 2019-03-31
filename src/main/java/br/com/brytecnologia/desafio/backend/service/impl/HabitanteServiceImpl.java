@@ -52,14 +52,16 @@ public class HabitanteServiceImpl implements HabitanteService {
 			throw new ConflictDataException("O codigo do habitante ja esta cadastrado no sistema.");
 		}
 
+		Habitante newHabt = habitanteRepository.save(habitante);
 		if (habitante.hasEndereco()) {
 			for (Endereco endereco : habitante.getEnderecos()) {
+				endereco.setHabitante(habitante);
 				enderecoService.populateEndereco(endereco);
-				enderecoService.save(endereco);
+				newHabt.addEndereco(enderecoService.save(endereco));
 			}
 		}
-		habitanteRepository.save(habitante);
-		return habitante;
+
+		return newHabt;
 	}
 
 	@Override

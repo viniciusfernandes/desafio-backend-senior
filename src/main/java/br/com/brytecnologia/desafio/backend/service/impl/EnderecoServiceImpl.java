@@ -28,6 +28,14 @@ public class EnderecoServiceImpl implements EnderecoService {
 	@Override
 	public Endereco findByCodigoPostal(String codigoPostal) {
 
+		/*
+		 * Endereco endereco = new Endereco(); endereco.setBairro("Centro");
+		 * endereco.setCodigoPostal(codigoPostal); endereco.setComplemento("Jr Rey");
+		 * endereco.setLocalizacao("Diadema");
+		 * endereco.setLogradouro("Avenida Visconde do rio branco");
+		 * endereco.setNumero(987); endereco.setUf("SP"); return endereco;
+		 * 
+		 */
 		Map<String, String> params = new HashMap<>();
 		params.put("cep", codigoPostal);
 		RestTemplate restTemplate = new RestTemplate();
@@ -59,7 +67,7 @@ public class EnderecoServiceImpl implements EnderecoService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public Integer save(Endereco endereco) throws BlanckDataException, BadFormatDataException {
+	public Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException {
 		if (endereco == null || !endereco.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal do endereco nao pode estar em branco.");
 		} else if (!isCodigoPostalValido(endereco.getCodigoPostal())) {

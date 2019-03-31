@@ -1,14 +1,13 @@
 package br.com.brytecnologia.desafio.backend.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tb_habitante")
@@ -22,7 +21,7 @@ public class Habitante implements Serializable {
 	@Id
 	private String codigo;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@Transient
 	private List<Endereco> enderecos;
 
 	public String getNome() {
@@ -55,5 +54,12 @@ public class Habitante implements Serializable {
 
 	public boolean hasEndereco() {
 		return enderecos != null && !enderecos.isEmpty();
+	}
+
+	public void addEndereco(Endereco endereco) {
+		if (enderecos == null) {
+			setEnderecos(new ArrayList<>());
+		}
+		enderecos.add(endereco);
 	}
 }
