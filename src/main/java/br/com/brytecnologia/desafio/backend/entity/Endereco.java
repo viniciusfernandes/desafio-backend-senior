@@ -3,6 +3,7 @@ package br.com.brytecnologia.desafio.backend.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class Endereco implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "codigo_habitante", referencedColumnName = "codigo", nullable = false)
 	private Habitante habitante;
 
@@ -32,7 +33,7 @@ public class Endereco implements Serializable {
 	private String codigoPostal;
 	private Integer numero;
 	private String complemento;
-	private String localizacao;
+	private String localidade;
 	private String uf;
 
 	public Integer getId() {
@@ -91,12 +92,12 @@ public class Endereco implements Serializable {
 		this.complemento = complemento;
 	}
 
-	public String getLocalizacao() {
-		return localizacao;
+	public String getLocalidade() {
+		return localidade;
 	}
 
-	public void setLocalizacao(String localizacao) {
-		this.localizacao = localizacao;
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
 	}
 
 	public String getUf() {

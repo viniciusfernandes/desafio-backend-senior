@@ -46,23 +46,24 @@ public class EnderecoServiceImpl implements EnderecoService {
 	}
 
 	@Override
-	public Endereco populateEndereco(Endereco endereco) throws BlanckDataException, InvalidDataException {
-		if (endereco == null || !endereco.hasCodigoPostal()) {
+	public Endereco populateEndereco(Endereco enderecoHabitante) throws BlanckDataException, InvalidDataException {
+		if (enderecoHabitante == null || !enderecoHabitante.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal eh obrigatorio para o preenchimento do endereco");
 		}
 
-		Endereco end = findByCodigoPostal(endereco.getCodigoPostal());
-		if (end == null) {
-			throw new InvalidDataException("Nao existe endereco para o codigo postal " + endereco.getCodigoPostal());
+		Endereco endereco = findByCodigoPostal(enderecoHabitante.getCodigoPostal());
+		if (endereco == null) {
+			throw new InvalidDataException(
+					"Nao existe endereco para o codigo postal " + enderecoHabitante.getCodigoPostal());
 		}
 
-		endereco.setBairro(end.getBairro());
-		endereco.setComplemento(end.getComplemento());
-		endereco.setLocalizacao(end.getLocalizacao());
-		endereco.setLogradouro(end.getLogradouro());
-		endereco.setUf(end.getUf());
+		enderecoHabitante.setBairro(endereco.getBairro());
+		enderecoHabitante.setComplemento(endereco.getComplemento());
+		enderecoHabitante.setLocalidade(endereco.getLocalidade());
+		enderecoHabitante.setLogradouro(endereco.getLogradouro());
+		enderecoHabitante.setUf(endereco.getUf());
 
-		return endereco;
+		return enderecoHabitante;
 	}
 
 	@Override

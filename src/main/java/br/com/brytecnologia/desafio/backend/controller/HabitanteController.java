@@ -72,8 +72,13 @@ public class HabitanteController {
 	}
 
 	@DeleteMapping("/{codigo}")
-	public String removerHabitante(String codigo) {
-		return null;
+	public ResponseEntity<HabitanteDTO> deleteByCodigo(@PathVariable String codigo) {
+		try {
+			habitanteService.deleteByCodigo(codigo);
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NO_CONTENT);
+		} catch (InvalidDataException e) {
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	private HabitanteDTO convert(Habitante habitante) {

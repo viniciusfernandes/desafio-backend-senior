@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tb_habitante")
@@ -22,6 +21,13 @@ public class Habitante implements Serializable {
 
 	@Id
 	private String codigo;
+
+	public Habitante() {
+	}
+
+	public Habitante(String codigo) {
+		this.codigo = codigo;
+	}
 
 	@OneToMany(mappedBy = "habitante", fetch = FetchType.LAZY)
 	private List<Endereco> enderecos;

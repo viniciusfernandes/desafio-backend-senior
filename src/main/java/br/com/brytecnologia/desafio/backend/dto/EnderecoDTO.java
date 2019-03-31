@@ -2,14 +2,6 @@ package br.com.brytecnologia.desafio.backend.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import br.com.brytecnologia.desafio.backend.entity.Habitante;
-
 public class EnderecoDTO implements Serializable {
 
 	/**
@@ -21,7 +13,7 @@ public class EnderecoDTO implements Serializable {
 	private String codigoPostal;
 	private Integer numero;
 	private String complemento;
-	private String localizacao;
+	private String localidade;
 	private String uf;
 
 	public String getBairro() {
@@ -64,12 +56,12 @@ public class EnderecoDTO implements Serializable {
 		this.complemento = complemento;
 	}
 
-	public String getLocalizacao() {
-		return localizacao;
+	public String getLocalidade() {
+		return localidade;
 	}
 
-	public void setLocalizacao(String localizacao) {
-		this.localizacao = localizacao;
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
 	}
 
 	public String getUf() {

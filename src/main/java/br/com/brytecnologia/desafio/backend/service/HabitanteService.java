@@ -16,4 +16,6 @@ public interface HabitanteService {
 	Habitante save(Habitante habitante) throws BlanckDataException, ConflictDataException, InvalidDataException, BadFormatDataException;
 
 	boolean isCodigoExistente(String codigo);
+
+	void deleteByCodigo(String codigo) throws InvalidDataException;
 }
