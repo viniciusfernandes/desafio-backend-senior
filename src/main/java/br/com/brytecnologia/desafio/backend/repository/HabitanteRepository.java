@@ -19,7 +19,7 @@ public class HabitanteRepository {
 
 	public Habitante findByCodigo(String codigo) {
 		try {
-			return em.createQuery("select h from Habitante h where h.codigo=:codigo", Habitante.class)
+			return em.createQuery("select h from Habitante h join fetch h.enderecos where h.codigo=:codigo", Habitante.class)
 					.setParameter("codigo", codigo).getSingleResult();
 		} catch (NoResultException | NonUniqueResultException e) {
 			return null;

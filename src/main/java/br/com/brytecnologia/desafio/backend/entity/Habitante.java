@@ -3,6 +3,7 @@ package br.com.brytecnologia.desafio.backend.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class Habitante implements Serializable {
 	@Id
 	private String codigo;
 
-	@OneToMany(mappedBy = "habitante", fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY)
 	private List<Endereco> enderecos;
 
 	public String getNome() {

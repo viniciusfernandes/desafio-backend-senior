@@ -1,4 +1,4 @@
-package br.com.brytecnologia.desafio.backend.service.impl;
+package br.com.brytecnologia.desafio.backend.service.exception;
 
 public class ConflictDataException extends Exception {
 

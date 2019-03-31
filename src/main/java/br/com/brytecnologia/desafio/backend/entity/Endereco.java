@@ -3,9 +3,9 @@ package br.com.brytecnologia.desafio.backend.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,11 +18,10 @@ public class Endereco implements Serializable {
 	private static final long serialVersionUID = 8248563394094551454L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "codigo_habitante", referencedColumnName = "codigo", nullable = false)
-	private Habitante habitante;
+
 	private String bairro;
 	private String logradouro;
 	private String codigoPostal;
@@ -47,14 +46,7 @@ public class Endereco implements Serializable {
 		this.codigoPostal = codigoPostal;
 	}
 
-	public Habitante getHabitante() {
-		return habitante;
-	}
-
-	public void setHabitante(Habitante habitante) {
-		this.habitante = habitante;
-	}
-
+	
 	public String getBairro() {
 		return bairro;
 	}
