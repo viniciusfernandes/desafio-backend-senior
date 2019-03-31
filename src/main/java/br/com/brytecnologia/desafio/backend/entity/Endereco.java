@@ -4,8 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity(name = "tb_usuario")
+@Entity
+@Table(name = "tb_endereco")
 public class Endereco implements Serializable {
 
 	/**
@@ -16,6 +20,8 @@ public class Endereco implements Serializable {
 	@Id
 	private Integer id;
 
+	@ManyToOne
+	@JoinColumn(name = "codigo_habitante", referencedColumnName = "codigo", nullable = false)
 	private Habitante habitante;
 	private String bairro;
 	private String logradouro;

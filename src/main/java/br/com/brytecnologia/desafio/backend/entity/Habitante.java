@@ -3,10 +3,17 @@ package br.com.brytecnologia.desafio.backend.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-@Entity(name = "tb_habitante")
+@Entity
+@Table(name = "tb_habitante")
 public class Habitante implements Serializable {
 	/**
 	 * 
@@ -16,6 +23,8 @@ public class Habitante implements Serializable {
 
 	@Id
 	private String codigo;
+
+	@OneToMany(mappedBy = "habitante", fetch = FetchType.LAZY)
 	private List<Endereco> enderecos;
 
 	public String getNome() {
