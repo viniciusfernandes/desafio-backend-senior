@@ -33,13 +33,23 @@ public class HabitanteServiceImpl implements HabitanteService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public String save(Habitante habitante) throws BusinessException {
+	public Habitante save(Habitante habitante) throws BlanckDataException, InvalidDataException {
 		if (habitante == null) {
-			throw new BusinessException("O habitante nao pode ser nulo.");
+			throw new BlanckDataException("O habitante nao pode ser nulo.");
 		} else if (!habitante.hasCodigo()) {
-			throw new BusinessException("O codigo do habitante eh obrigatorio.");
+			throw new BlanckDataException("O codigo do habitante eh obrigatorio.");
+		} else if (isCodigoExistente(habitante.getCodigo())) {
+			throw new InvalidDataException("O codigo do habitante ja esta cadastrado no sistema.");
 		}
 		return habitanteRepository.save(habitante);
+	}
+
+	@Override
+	public boolean isCodigoExistente(String codigo) {
+		if (codigo == null || codigo.trim().length() <= 0) {
+			return false;
+		}
+		return habitanteRepository.isCodigoExistente(codigo);
 	}
 
 }

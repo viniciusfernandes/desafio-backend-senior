@@ -49,7 +49,7 @@ public class Habitante implements Serializable {
 	}
 
 	public boolean hasCodigo() {
-		return codigo != null || codigo.trim().length() > 0;
+		return codigo != null && codigo.trim().length() > 0;
 	}
 
 }

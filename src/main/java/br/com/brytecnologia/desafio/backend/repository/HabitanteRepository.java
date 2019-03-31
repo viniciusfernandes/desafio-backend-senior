@@ -30,8 +30,12 @@ public class HabitanteRepository {
 		return em.createQuery("from Habitante", Habitante.class).getResultList();
 	}
 
-	public String save(Habitante habitante) {
-		return em.merge(habitante).getCodigo();
+	public Habitante save(Habitante habitante) {
+		return em.merge(habitante);
 	}
 
+	public boolean isCodigoExistente(String codigo) {
+		return em.createQuery("select h.codigo from Habitante h where h.codigo=:codigo", String.class)
+				.setParameter("codigo", codigo).getResultList().size() > 0;
+	}
 }
