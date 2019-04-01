@@ -33,11 +33,11 @@ import br.com.brytecnologia.desafio.backend.security.authentication.JwtToken;
 import br.com.brytecnologia.desafio.backend.security.authentication.JwtTokenUtil;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/login")
 @CrossOrigin
-public class AuthenticationController {
+public class LoginController {
 
-	private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 	private static final String TOKEN_HEADER = "Authorization";
 	private static final String BEARER_PREFIX = "Bearer ";
 
@@ -59,7 +59,7 @@ public class AuthenticationController {
 	 * @throws AuthenticationException
 	 */
 	@PostMapping
-	public ResponseEntity<Response<JwtToken>> gerarTokenJwt(@Valid @RequestBody JwtLogin login, BindingResult result)
+	public ResponseEntity<Response<JwtToken>> generateTokenJwt(@Valid @RequestBody JwtLogin login, BindingResult result)
 			throws AuthenticationException {
 		Response<JwtToken> response = new Response<JwtToken>();
 
@@ -69,12 +69,12 @@ public class AuthenticationController {
 			return ResponseEntity.badRequest().body(response);
 		}
 
-		log.info("Gerando token para o email {}.", login.getEmail());
+		log.info("Gerando token para o username {}.", login.getUsername());
 		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getSenha()));
+				.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(login.getEmail());
+		UserDetails userDetails = userDetailsService.loadUserByUsername(login.getUsername());
 		JwtToken jwtToken = new JwtToken(jwtTokenUtil.obterToken(userDetails));
 
 		for (GrantedAuthority auth : userDetails.getAuthorities()) {
@@ -85,8 +85,8 @@ public class AuthenticationController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/token/expirado")
-	public ResponseEntity<Response<Boolean>> verificarTokeExpirado(@RequestHeader HttpHeaders headers) {
+	@GetMapping("/token/expired")
+	public ResponseEntity<Response<Boolean>> checkingTokeExpiration(@RequestHeader HttpHeaders headers) {
 		String token = headers.get("Authorization").get(0);
 		Response<Boolean> resp = new Response<>();
 

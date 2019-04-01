@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,16 +38,19 @@ public class HabitanteController {
 	private HabitanteService habitanteService;
 
 	@Autowired
+
 	public HabitanteController(HabitanteService habitanteService) {
 		this.habitanteService = habitanteService;
 	}
 
 	@GetMapping("")
+	@PreAuthorize("hasAnyRole('ADMIN', 'READONLY')")
 	public ResponseEntity<List<HabitanteDTO>> findAll() {
 		return new ResponseEntity<List<HabitanteDTO>>(convert(habitanteService.findAll()), HttpStatus.OK);
 	}
 
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAnyRole('ADMIN', 'READONLY')")
 	public ResponseEntity<HabitanteDTO> findByCodigo(@PathVariable String codigo) {
 		Habitante habitante = habitanteService.findByCodigo(codigo);
 		if (habitante != null) {
@@ -57,6 +61,7 @@ public class HabitanteController {
 	}
 
 	@PostMapping("")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<HabitanteDTO> save(@RequestBody HabitanteDTO habitanteDto) {
 		try {
 			HabitanteDTO dto = convert(habitanteService.save(convert(habitanteDto)));
@@ -72,6 +77,7 @@ public class HabitanteController {
 	}
 
 	@PutMapping("/{codigo}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<HabitanteDTO> update(@PathVariable String codigo, @RequestBody HabitanteDTO habitanteDto) {
 		if (habitanteDto != null) {
 			habitanteDto.setCodigo(codigo);
@@ -89,6 +95,7 @@ public class HabitanteController {
 	}
 
 	@DeleteMapping("/{codigo}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<HabitanteDTO> deleteByCodigo(@PathVariable String codigo) {
 		try {
 			habitanteService.deleteByCodigo(codigo);

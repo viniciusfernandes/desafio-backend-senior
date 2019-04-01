@@ -7,14 +7,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.brytecnologia.desafio.backend.security.authentication.JwtUserFactory;
-import br.com.brytecnologia.desafio.backend.security.authentication.entity.Usuario;
-import br.com.brytecnologia.desafio.backend.security.authentication.service.UsuarioService;
+import br.com.brytecnologia.desafio.backend.security.authentication.entity.Login;
+import br.com.brytecnologia.desafio.backend.security.authentication.service.LoginService;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class LoginDetailServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private LoginService loginService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -22,11 +22,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("Usuário esta em branco.");
 		}
 
-		Usuario u = usuarioService.buscarPorEmail(username);
+		Login u = loginService.findByUsername(username);
 		if (u != null) {
 			return JwtUserFactory.gerarJwtUser(u);
 		}
 
-		throw new UsernameNotFoundException("Usuário \"" + username + "\" não encontrado.");
+		throw new UsernameNotFoundException("Username \"" + username + "\" nao encontrado.");
 	}
 }
