@@ -36,7 +36,7 @@ public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 
 		Login readonly = new Login();
 		readonly.setUsuario("readonly");
-		readonly.setPerfil(PerfilEnum.ROLE_USUARIO);
+		readonly.setPerfil(PerfilEnum.ROLE_READONLY);
 		readonly.setSenha(SenhaUtils.gerarBCrypt("readonlypassword"));
 		loginService.save(readonly);
 
