@@ -26,6 +26,7 @@ import br.com.brytecnologia.desafio.backend.service.exception.BlanckDataExceptio
 import br.com.brytecnologia.desafio.backend.service.exception.ClientServiceException;
 import br.com.brytecnologia.desafio.backend.service.exception.ConflictDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.InvalidDataException;
+import br.com.brytecnologia.desafio.backend.service.exception.NoDataException;
 import br.com.brytecnologia.desafio.backend.utils.EntityUtils;
 
 @CrossOrigin
@@ -56,7 +57,7 @@ public class HabitanteController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<HabitanteDTO> save(@RequestBody HabitanteDTO habitanteDto) throws BlanckDataException {
+	public ResponseEntity<HabitanteDTO> save(@RequestBody HabitanteDTO habitanteDto) {
 		try {
 			HabitanteDTO dto = convert(habitanteService.save(convert(habitanteDto)));
 			return new ResponseEntity<HabitanteDTO>(dto, HttpStatus.CREATED);
@@ -67,11 +68,24 @@ public class HabitanteController {
 		} catch (ClientServiceException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.SERVICE_UNAVAILABLE);
 		}
+
 	}
 
 	@PutMapping("/{codigo}")
-	public String atualizarHabitante(Habitante habitante) {
-		return null;
+	public ResponseEntity<HabitanteDTO> update(@PathVariable String codigo, @RequestBody HabitanteDTO habitanteDto) {
+		if (habitanteDto != null) {
+			habitanteDto.setCodigo(codigo);
+		}
+		try {
+			habitanteService.update(convert(habitanteDto));
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NO_CONTENT);
+		} catch (BlanckDataException | BadFormatDataException | InvalidDataException e) {
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.BAD_REQUEST);
+		} catch (ClientServiceException e) {
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.SERVICE_UNAVAILABLE);
+		} catch (NoDataException e) {
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@DeleteMapping("/{codigo}")
@@ -124,4 +138,5 @@ public class HabitanteController {
 
 		return habitante;
 	}
+
 }
