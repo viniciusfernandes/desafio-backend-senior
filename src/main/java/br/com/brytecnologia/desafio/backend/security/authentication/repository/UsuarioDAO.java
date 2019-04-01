@@ -7,6 +7,6 @@ import br.com.brytecnologia.desafio.backend.security.authentication.entity.Usuar
 
 @Transactional(readOnly = true)
 public interface UsuarioDAO extends JpaRepository<Usuario, Long> {
-	Usuario findByEmail(String email);
+	Usuario findByUsuario(String usuario);
 
 }

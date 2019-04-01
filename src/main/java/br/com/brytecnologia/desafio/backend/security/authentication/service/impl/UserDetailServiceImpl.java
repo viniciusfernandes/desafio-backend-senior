@@ -22,7 +22,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("Usuário esta em branco.");
 		}
 
-		Usuario u = usuarioService.buscarPorEmail(username);
+		Usuario u = usuarioService.findByUsuario(username);
 		if (u != null) {
 			return JwtUserFactory.gerarJwtUser(u);
 		}

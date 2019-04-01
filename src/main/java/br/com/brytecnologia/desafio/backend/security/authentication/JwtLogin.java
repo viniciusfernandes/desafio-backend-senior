@@ -1,13 +1,11 @@
 package br.com.brytecnologia.desafio.backend.security.authentication;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class JwtLogin {
 
-	@NotEmpty(message = "Email não pode ser vazio.")
-	@Email(message = "Email inválido.")
-	private String email;
+	@NotEmpty(message = "Usuario não pode ser vazio.")
+	private String usuario;
 
 	@NotEmpty(message = "Senha não pode ser vazia.")
 	private String senha;
@@ -15,12 +13,12 @@ public class JwtLogin {
 	public JwtLogin() {
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUsuario() {
+		return usuario;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 	public String getSenha() {
@@ -33,7 +31,7 @@ public class JwtLogin {
 
 	@Override
 	public String toString() {
-		return "JwtAuthenticationRequestDto [email=" + email + ", senha=" + senha + "]";
+		return "JwtAuthenticationRequestDto [usuario=" + usuario + ", senha=" + senha + "]";
 	}
 
 }

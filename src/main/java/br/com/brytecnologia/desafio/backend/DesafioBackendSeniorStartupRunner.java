@@ -28,17 +28,20 @@ public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 
 		usuarioService.deleteAll();
 
-		Usuario usuario = new Usuario();
-		usuario.setEmail("usuario@email.com");
-		usuario.setPerfil(PerfilEnum.ROLE_USUARIO);
-		usuario.setSenha(SenhaUtils.gerarBCrypt("123456"));
-		usuarioService.inserir(usuario);
-
 		Usuario admin = new Usuario();
-		admin.setEmail("admin@email.com");
+		admin.setUsuario("admin");
 		admin.setPerfil(PerfilEnum.ROLE_ADMIN);
-		admin.setSenha(SenhaUtils.gerarBCrypt("123456"));
+		admin.setSenha(SenhaUtils.gerarBCrypt("adminpassword"));
 		usuarioService.inserir(admin);
+
+		Usuario readonly = new Usuario();
+		readonly.setUsuario("readonly");
+		readonly.setPerfil(PerfilEnum.ROLE_USUARIO);
+		readonly.setSenha(SenhaUtils.gerarBCrypt("readonlypassword"));
+		usuarioService.inserir(readonly);
+
+		usuarioService.findAll()
+				.forEach(user -> logger.info("Usuario: " + user.getUsuario() + " senha: " + user.getSenha()));
 
 	}
 }

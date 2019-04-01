@@ -1,5 +1,7 @@
 package br.com.brytecnologia.desafio.backend.security.authentication.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,18 +11,19 @@ import br.com.brytecnologia.desafio.backend.security.authentication.repository.U
 import br.com.brytecnologia.desafio.backend.security.authentication.service.UsuarioService;
 
 @Service
+@Transactional(readOnly = true)
 public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private UsuarioDAO usuarioDAO;
 
-	@Transactional(readOnly = true)
+	
 	@Override
-	public Usuario buscarPorEmail(String email) {
-		if (email == null || email.trim().isEmpty()) {
+	public Usuario findByUsuario(String usuario) {
+		if (usuario == null || usuario.trim().isEmpty()) {
 			return null;
 		}
-		return usuarioDAO.findByEmail(email);
+		return usuarioDAO.findByUsuario(usuario);
 	}
 
 	@Transactional(readOnly = false)
@@ -34,6 +37,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public void deleteAll() {
 		usuarioDAO.deleteAll();
+	}
+	
+	@Override
+	public List<Usuario> findAll(){
+		return usuarioDAO.findAll();
 	}
 
 }

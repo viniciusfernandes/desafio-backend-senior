@@ -20,7 +20,7 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 306411570471828345L;
 
 	private Long id;
-	private String email;
+	private String usuario;
 	private String senha;
 	private PerfilEnum perfil;
 
@@ -37,13 +37,13 @@ public class Usuario implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "email", nullable = false)
-	public String getEmail() {
-		return email;
+	@Column(name = "usuario", nullable = false)
+	public String getUsuario() {
+		return usuario;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 	@Enumerated(EnumType.STRING)
