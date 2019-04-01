@@ -1,7 +1,7 @@
 package br.com.brytecnologia.desafio.backend;
 
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 		this.loginService = loginService;
 	}
 
-	private Logger logger = Logger.getLogger(this.getClass().getName());
+	private Logger logger = LoggerFactory.getLogger(DesafioBackendSeniorStartupRunner.class);
 
 	@Override
 	public void run(String... args) throws Exception {
