@@ -23,6 +23,7 @@ import br.com.brytecnologia.desafio.backend.entity.Habitante;
 import br.com.brytecnologia.desafio.backend.service.HabitanteService;
 import br.com.brytecnologia.desafio.backend.service.exception.BadFormatDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.BlanckDataException;
+import br.com.brytecnologia.desafio.backend.service.exception.ClientServiceException;
 import br.com.brytecnologia.desafio.backend.service.exception.ConflictDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.InvalidDataException;
 import br.com.brytecnologia.desafio.backend.utils.EntityUtils;
@@ -63,6 +64,8 @@ public class HabitanteController {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.CONFLICT);
 		} catch (BlanckDataException | BadFormatDataException | InvalidDataException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.BAD_REQUEST);
+		} catch (ClientServiceException e) {
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.SERVICE_UNAVAILABLE);
 		}
 	}
 

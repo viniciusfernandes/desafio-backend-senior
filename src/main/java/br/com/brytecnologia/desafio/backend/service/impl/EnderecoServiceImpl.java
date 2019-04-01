@@ -13,6 +13,7 @@ import br.com.brytecnologia.desafio.backend.repository.EnderecoRepository;
 import br.com.brytecnologia.desafio.backend.service.EnderecoService;
 import br.com.brytecnologia.desafio.backend.service.exception.BadFormatDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.BlanckDataException;
+import br.com.brytecnologia.desafio.backend.service.exception.ClientServiceException;
 import br.com.brytecnologia.desafio.backend.service.exception.InvalidDataException;
 
 @Service
@@ -27,20 +28,18 @@ public class EnderecoServiceImpl implements EnderecoService {
 
 	@Override
 	public Endereco findByCodigoPostal(String codigoPostal) {
-
-		/*
-		 * Endereco endereco = new Endereco(); endereco.setBairro("Centro");
-		 * endereco.setCodigoPostal(codigoPostal); endereco.setComplemento("Jr Rey");
-		 * endereco.setLocalizacao("Diadema");
-		 * endereco.setLogradouro("Avenida Visconde do rio branco");
-		 * endereco.setNumero(987); endereco.setUf("SP"); return endereco;
-		 * 
-		 */
 		Map<String, String> params = new HashMap<>();
 		params.put("cep", codigoPostal);
 		RestTemplate restTemplate = new RestTemplate();
-
-		Endereco endereco = restTemplate.getForObject(URI_CEP, Endereco.class, params);
+		Endereco endereco = null;
+		try {
+			endereco = restTemplate.getForObject(URI_CEP, Endereco.class, params);
+		} catch (Exception e) {
+			throw new ClientServiceException("Falha na comunicacao com o servico de CEP", e);
+		}
+		if (!endereco.hasLogradouro()) {
+			return null;
+		}
 		endereco.setCodigoPostal(codigoPostal);
 		return endereco;
 	}
@@ -49,6 +48,11 @@ public class EnderecoServiceImpl implements EnderecoService {
 	public Endereco populateEndereco(Endereco enderecoHabitante) throws BlanckDataException, InvalidDataException {
 		if (enderecoHabitante == null || !enderecoHabitante.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal eh obrigatorio para o preenchimento do endereco");
+		} else if (!isCodigoPostalValido(enderecoHabitante.getCodigoPostal())) {
+			throw new InvalidDataException(
+					"O codigo postal do endereco deve conter oito digitos numericos no padrao 99999999, mas foi enviado "
+							+ enderecoHabitante.getCodigoPostal());
+
 		}
 
 		Endereco endereco = findByCodigoPostal(enderecoHabitante.getCodigoPostal());
@@ -68,7 +72,10 @@ public class EnderecoServiceImpl implements EnderecoService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException {
+	public Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException, InvalidDataException {
+
+		endereco = populateEndereco(endereco);
+
 		if (endereco == null || !endereco.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal do endereco nao pode estar em branco.");
 		} else if (!isCodigoPostalValido(endereco.getCodigoPostal())) {
@@ -80,7 +87,7 @@ public class EnderecoServiceImpl implements EnderecoService {
 		return enderecoRepository.save(endereco);
 	}
 
-	public boolean isCodigoPostalValido(String codigoPostal) throws BadFormatDataException {
+	public boolean isCodigoPostalValido(String codigoPostal) {
 		return codigoPostal != null && codigoPostal.matches("\\d{8}");
 	}
 

@@ -60,7 +60,6 @@ public class HabitanteServiceImpl implements HabitanteService {
 			habitante.clearEnderecos();
 			for (Endereco endereco : enderecos) {
 				endereco.setHabitante(habitante);
-				enderecoService.populateEndereco(endereco);
 				habitante.addEndereco(enderecoService.save(endereco));
 			}
 		}
@@ -76,12 +75,11 @@ public class HabitanteServiceImpl implements HabitanteService {
 		return habitanteRepository.isCodigoExistente(codigo);
 	}
 
-	
 	@Override
-	@Transactional(readOnly=false)
-	public void deleteByCodigo(String codigo) throws InvalidDataException{
-		if(codigo==null||!isCodigoExistente(codigo)) {
-			throw new InvalidDataException("Nao existe habitante com codigo "+codigo);
+	@Transactional(readOnly = false)
+	public void deleteByCodigo(String codigo) throws InvalidDataException {
+		if (codigo == null || !isCodigoExistente(codigo)) {
+			throw new InvalidDataException("Nao existe habitante com codigo " + codigo);
 		}
 		habitanteRepository.deleteByCodigo(codigo);
 	}

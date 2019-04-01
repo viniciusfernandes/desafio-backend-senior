@@ -112,4 +112,8 @@ public class Endereco implements Serializable {
 		return codigoPostal != null && codigoPostal.trim().length() > 0;
 	}
 
+	public boolean hasLogradouro() {
+		return logradouro != null && logradouro.trim().length() > 0;
+	}
+
 }

@@ -12,5 +12,5 @@ public interface EnderecoService {
 
 	Endereco populateEndereco(Endereco endereco) throws InvalidDataException, BlanckDataException;
 
-	Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException;
+	Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException, InvalidDataException;
 }
