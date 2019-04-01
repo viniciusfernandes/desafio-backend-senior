@@ -7,18 +7,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import br.com.brytecnologia.desafio.backend.security.authentication.SenhaUtils;
-import br.com.brytecnologia.desafio.backend.security.authentication.entity.Usuario;
+import br.com.brytecnologia.desafio.backend.security.authentication.entity.Login;
 import br.com.brytecnologia.desafio.backend.security.authentication.enums.PerfilEnum;
-import br.com.brytecnologia.desafio.backend.security.authentication.service.UsuarioService;
+import br.com.brytecnologia.desafio.backend.security.authentication.service.LoginService;
 
 @Component
 public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 
-	private UsuarioService usuarioService;
+	private LoginService loginService;
 
 	@Autowired
-	public DesafioBackendSeniorStartupRunner(UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
+	public DesafioBackendSeniorStartupRunner(LoginService loginService) {
+		this.loginService = loginService;
 	}
 
 	private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -26,22 +26,22 @@ public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		usuarioService.deleteAll();
+		loginService.deleteAll();
 
-		Usuario admin = new Usuario();
+		Login admin = new Login();
 		admin.setUsuario("admin");
 		admin.setPerfil(PerfilEnum.ROLE_ADMIN);
 		admin.setSenha(SenhaUtils.gerarBCrypt("adminpassword"));
-		usuarioService.inserir(admin);
+		loginService.save(admin);
 
-		Usuario readonly = new Usuario();
+		Login readonly = new Login();
 		readonly.setUsuario("readonly");
 		readonly.setPerfil(PerfilEnum.ROLE_USUARIO);
 		readonly.setSenha(SenhaUtils.gerarBCrypt("readonlypassword"));
-		usuarioService.inserir(readonly);
+		loginService.save(readonly);
 
-		usuarioService.findAll()
-				.forEach(user -> logger.info("Usuario: " + user.getUsuario() + " senha: " + user.getSenha()));
+		loginService.findAll()
+				.forEach(login -> logger.info("Usuario cadastrado no STARTUP do sistema: " + login.getUsuario()));
 
 	}
 }

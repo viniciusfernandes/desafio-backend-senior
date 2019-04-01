@@ -14,8 +14,8 @@ import javax.persistence.Table;
 import br.com.brytecnologia.desafio.backend.security.authentication.enums.PerfilEnum;
 
 @Entity
-@Table(name = "tb_usuario")
-public class Usuario implements Serializable {
+@Table(name = "tb_login")
+public class Login implements Serializable {
 
 	private static final long serialVersionUID = 306411570471828345L;
 
@@ -24,7 +24,7 @@ public class Usuario implements Serializable {
 	private String senha;
 	private PerfilEnum perfil;
 
-	public Usuario() {
+	public Login() {
 	}
 
 	@Id
