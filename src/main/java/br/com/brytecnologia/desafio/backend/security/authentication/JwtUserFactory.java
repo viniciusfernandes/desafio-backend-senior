@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import br.com.brytecnologia.desafio.backend.security.authentication.entity.Login;
+import br.com.brytecnologia.desafio.backend.security.authentication.entity.Usuario;
 import br.com.brytecnologia.desafio.backend.security.authentication.enums.PerfilEnum;
 
 public class JwtUserFactory {
@@ -14,9 +14,9 @@ public class JwtUserFactory {
 	private JwtUserFactory() {
 	}
 
-	public static JwtUser gerarJwtUser(Login login) {
-		return new JwtUser(login.getId(), login.getUsername(), login.getSenha(),
-				getGrantedAuthorities(login.getPerfil()));
+	public static JwtUser gerarJwtUser(Usuario usuario) {
+		return new JwtUser(usuario.getId(), usuario.getEmail(), usuario.getSenha(),
+				getGrantedAuthorities(usuario.getPerfil()));
 	}
 
 	private static List<GrantedAuthority> getGrantedAuthorities(PerfilEnum perfilEnum) {

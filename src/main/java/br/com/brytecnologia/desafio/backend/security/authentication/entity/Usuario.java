@@ -15,16 +15,16 @@ import br.com.brytecnologia.desafio.backend.security.authentication.enums.Perfil
 
 @Entity
 @Table(name = "tb_usuario")
-public class Login implements Serializable {
+public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 306411570471828345L;
 
 	private Long id;
-	private String username;
+	private String email;
 	private String senha;
 	private PerfilEnum perfil;
 
-	public Login() {
+	public Usuario() {
 	}
 
 	@Id
@@ -37,13 +37,13 @@ public class Login implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "username", nullable = false)
-	public String getUsername() {
-		return username;
+	@Column(name = "email", nullable = false)
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Enumerated(EnumType.STRING)

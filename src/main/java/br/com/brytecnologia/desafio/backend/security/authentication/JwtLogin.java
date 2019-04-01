@@ -5,35 +5,35 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class JwtLogin {
 
-	@NotEmpty(message = "Username não pode ser vazio.")
-	@Email(message = "Username inválido.")
-	private String username;
+	@NotEmpty(message = "Email não pode ser vazio.")
+	@Email(message = "Email inválido.")
+	private String email;
 
-	@NotEmpty(message = "Password não pode ser vazio.")
-	private String password;
+	@NotEmpty(message = "Senha não pode ser vazia.")
+	private String senha;
 
 	public JwtLogin() {
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getSenha() {
+		return senha;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	@Override
 	public String toString() {
-		return "JwtAuthenticationRequestDto [username =" + username + ", password=" + password + "]";
+		return "JwtAuthenticationRequestDto [email=" + email + ", senha=" + senha + "]";
 	}
 
 }
