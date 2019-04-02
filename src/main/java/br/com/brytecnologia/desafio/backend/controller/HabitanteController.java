@@ -50,6 +50,70 @@ public class HabitanteController {
 		this.habitanteService = habitanteService;
 	}
 
+	private HttpHeaders configHeaderLocation(HabitanteDTO habitanteDto) {
+		UriComponents uriComponents = UriComponentsBuilder.fromPath("/habitantes/{codigo}")
+				.buildAndExpand(habitanteDto == null ? "" : habitanteDto.getCodigo());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriComponents.toUri());
+		return headers;
+	}
+
+	private HabitanteDTO convert(Habitante habitante) {
+		if (habitante == null) {
+			return null;
+		}
+		HabitanteDTO habitanteDto = new HabitanteDTO();
+
+		EntityUtils.copy(habitante, habitanteDto);
+
+		if (habitante.hasEndereco()) {
+
+			habitanteDto.clearEnderecos();
+			EnderecoDTO endDto = null;
+			for (Endereco end : habitante.getEnderecos()) {
+				endDto = new EnderecoDTO();
+				EntityUtils.copy(end, endDto);
+				habitanteDto.addEndereco(endDto);
+			}
+		}
+
+		return habitanteDto;
+	}
+
+	private Habitante convert(HabitanteDTO habitanteDto) {
+		Habitante habitante = new Habitante();
+		EntityUtils.copy(habitanteDto, habitante);
+		if (habitanteDto.hasEndereco()) {
+
+			habitante.clearEnderecos();
+			Endereco end = null;
+			for (EnderecoDTO endDto : habitanteDto.getEnderecos()) {
+				end = new Endereco();
+				EntityUtils.copy(endDto, end);
+				habitante.addEndereco(end);
+			}
+		}
+
+		return habitante;
+	}
+
+	private List<HabitanteDTO> convert(List<Habitante> habitantes) {
+		List<HabitanteDTO> dtos = new ArrayList<>(habitantes.size());
+		habitantes.forEach(hab -> dtos.add(convert(hab)));
+		return dtos;
+	}
+
+	@DeleteMapping("/{codigo}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<HabitanteDTO> deleteByCodigo(@PathVariable String codigo) {
+		try {
+			habitanteService.deleteByCodigo(codigo);
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NO_CONTENT);
+		} catch (InvalidDataException e) {
+			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@GetMapping("")
 	@PreAuthorize("hasAnyRole('ADMIN', 'READONLY')")
 	public ResponseEntity<List<HabitanteDTO>> findAll() {
@@ -103,70 +167,6 @@ public class HabitanteController {
 		} catch (NoDataException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
 		}
-	}
-
-	@DeleteMapping("/{codigo}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<HabitanteDTO> deleteByCodigo(@PathVariable String codigo) {
-		try {
-			habitanteService.deleteByCodigo(codigo);
-			return new ResponseEntity<HabitanteDTO>(HttpStatus.NO_CONTENT);
-		} catch (InvalidDataException e) {
-			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	private HabitanteDTO convert(Habitante habitante) {
-		if (habitante == null) {
-			return null;
-		}
-		HabitanteDTO habitanteDto = new HabitanteDTO();
-
-		EntityUtils.copy(habitante, habitanteDto);
-
-		if (habitante.hasEndereco()) {
-
-			habitanteDto.clearEnderecos();
-			EnderecoDTO endDto = null;
-			for (Endereco end : habitante.getEnderecos()) {
-				endDto = new EnderecoDTO();
-				EntityUtils.copy(end, endDto);
-				habitanteDto.addEndereco(endDto);
-			}
-		}
-
-		return habitanteDto;
-	}
-
-	private List<HabitanteDTO> convert(List<Habitante> habitantes) {
-		List<HabitanteDTO> dtos = new ArrayList<>(habitantes.size());
-		habitantes.forEach(hab -> dtos.add(convert(hab)));
-		return dtos;
-	}
-
-	private Habitante convert(HabitanteDTO habitanteDto) {
-		Habitante habitante = new Habitante();
-		EntityUtils.copy(habitanteDto, habitante);
-		if (habitanteDto.hasEndereco()) {
-
-			habitante.clearEnderecos();
-			Endereco end = null;
-			for (EnderecoDTO endDto : habitanteDto.getEnderecos()) {
-				end = new Endereco();
-				EntityUtils.copy(endDto, end);
-				habitante.addEndereco(end);
-			}
-		}
-
-		return habitante;
-	}
-
-	private HttpHeaders configHeaderLocation(HabitanteDTO habitanteDto) {
-		UriComponents uriComponents = UriComponentsBuilder.fromPath("/habitantes/{codigo}")
-				.buildAndExpand(habitanteDto == null ? "" : habitanteDto.getCodigo());
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(uriComponents.toUri());
-		return headers;
 	}
 
 }

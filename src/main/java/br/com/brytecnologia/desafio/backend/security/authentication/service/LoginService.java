@@ -6,12 +6,12 @@ import br.com.brytecnologia.desafio.backend.security.authentication.entity.Login
 
 public interface LoginService {
 
-	Login findByUsuario(String usuario);
-
-	Long save(Login usuario);
-
 	void deleteAll();
 
 	List<Login> findAll();
+
+	Login findByUsuario(String usuario);
+
+	Long save(Login usuario);
 
 }

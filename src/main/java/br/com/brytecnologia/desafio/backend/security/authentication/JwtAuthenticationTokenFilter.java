@@ -21,10 +21,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	private static final String BEARER_PREFIX = "Bearer ";
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	private UserDetailsService userDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

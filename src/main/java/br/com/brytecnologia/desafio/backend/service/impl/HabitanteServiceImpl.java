@@ -29,10 +29,8 @@ import br.com.brytecnologia.desafio.backend.service.exception.NoDataException;
 @Service
 @Transactional(readOnly = true, rollbackFor = { Exception.class })
 public class HabitanteServiceImpl implements HabitanteService {
-
-	private HabitanteRepository habitanteRepository;
-
 	private EnderecoService enderecoService;
+	private HabitanteRepository habitanteRepository;
 
 	/*
 	 * Uma boa pratica eh efetuar a injecao de dependencias via construtor ao inves
@@ -43,6 +41,19 @@ public class HabitanteServiceImpl implements HabitanteService {
 	public HabitanteServiceImpl(EnderecoService enderecoService, HabitanteRepository habitanteRepository) {
 		this.enderecoService = enderecoService;
 		this.habitanteRepository = habitanteRepository;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteByCodigo(String codigo) throws InvalidDataException {
+		if (codigo == null || !isCodigoExistente(codigo)) {
+			throw new InvalidDataException("Nao existe habitante com codigo " + codigo);
+		}
+		habitanteRepository.deleteByCodigo(codigo);
 	}
 
 	/**
@@ -72,6 +83,18 @@ public class HabitanteServiceImpl implements HabitanteService {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 */
+	@Override
+	public boolean isCodigoExistente(String codigo) {
+		if (codigo == null || codigo.trim().length() <= 0) {
+			return false;
+		}
+		return habitanteRepository.isCodigoExistente(codigo);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @throws NoDataException
 	 * 
 	 */
@@ -85,54 +108,6 @@ public class HabitanteServiceImpl implements HabitanteService {
 			throw new ConflictDataException("O codigo do habitante ja esta cadastrado no sistema.");
 		}
 		return saveOrUpdate(habitante);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	@Transactional(readOnly = false)
-	public Habitante update(Habitante habitante)
-			throws BlanckDataException, BadFormatDataException, InvalidDataException, NoDataException {
-		validate(habitante);
-		if (!isCodigoExistente(habitante.getCodigo())) {
-			throw new NoDataException("O codigo do habitante nao existe no sistema.");
-		}
-		return saveOrUpdate(habitante);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public boolean isCodigoExistente(String codigo) {
-		if (codigo == null || codigo.trim().length() <= 0) {
-			return false;
-		}
-		return habitanteRepository.isCodigoExistente(codigo);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	@Transactional(readOnly = false)
-	public void deleteByCodigo(String codigo) throws InvalidDataException {
-		if (codigo == null || !isCodigoExistente(codigo)) {
-			throw new InvalidDataException("Nao existe habitante com codigo " + codigo);
-		}
-		habitanteRepository.deleteByCodigo(codigo);
-	}
-
-	private void validate(Habitante habitante) throws BlanckDataException {
-		if (habitante == null) {
-			throw new BlanckDataException("O habitante nao pode ser nulo.");
-		} else if (!habitante.hasCodigo()) {
-			throw new BlanckDataException("O codigo do habitante eh obrigatorio.");
-		}
 	}
 
 	private Habitante saveOrUpdate(Habitante habitante)
@@ -150,6 +125,29 @@ public class HabitanteServiceImpl implements HabitanteService {
 		}
 
 		return habitante;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public Habitante update(Habitante habitante)
+			throws BlanckDataException, BadFormatDataException, InvalidDataException, NoDataException {
+		validate(habitante);
+		if (!isCodigoExistente(habitante.getCodigo())) {
+			throw new NoDataException("O codigo do habitante nao existe no sistema.");
+		}
+		return saveOrUpdate(habitante);
+	}
+
+	private void validate(Habitante habitante) throws BlanckDataException {
+		if (habitante == null) {
+			throw new BlanckDataException("O habitante nao pode ser nulo.");
+		} else if (!habitante.hasCodigo()) {
+			throw new BlanckDataException("O codigo do habitante eh obrigatorio.");
+		}
 	}
 
 }

@@ -13,6 +13,7 @@ import br.com.brytecnologia.desafio.backend.entity.Habitante;
 
 /**
  * Classe responsavel pelo acesso direto aos dados do sistema.
+ * 
  * @author vinic
  *
  */
@@ -21,6 +22,33 @@ public class HabitanteRepository {
 
 	@PersistenceContext
 	private EntityManager em;
+
+	/**
+	 * Deleta o habitante cadastrado no sistema e seus respectivos enderecos atraves
+	 * de seu codigo
+	 * 
+	 * @param codigo chave primaria do habitante
+	 */
+	public void deleteByCodigo(String codigo) {
+		// Removendo primeiramente os enderecos para que nao haja registros orfaos.
+		em.createQuery("delete from Endereco e where e.habitante.codigo =:codigo").setParameter("codigo", codigo)
+				.executeUpdate();
+		em.createQuery("delete from Habitante h where h.codigo =:codigo").setParameter("codigo", codigo)
+				.executeUpdate();
+	}
+
+	/**
+	 * Pesquisa todos os habitantes do sistema
+	 * 
+	 * @return lista contendo todos os habitantes do sistema
+	 */
+	public List<Habitante> findAll() {
+		// Executando um distinct pois o join fetch do hibernate traz registros
+		// duplicados por conta de sua estrategia de implementacao.
+		// O left joi eh necessario para recuperar os habitantes sem endereco.
+		return em.createQuery("select distinct h from Habitante h left join fetch h.enderecos", Habitante.class)
+				.getResultList();
+	}
 
 	/**
 	 * Pesquisa o habitantes do sistema associado ao codigo
@@ -39,31 +67,6 @@ public class HabitanteRepository {
 	}
 
 	/**
-	 * Pesquisa todos os habitantes do sistema
-	 * 
-	 * @return lista contendo todos os habitantes do sistema
-	 */
-	public List<Habitante> findAll() {
-		// Executando um distinct pois o join fetch do hibernate traz registros
-		// duplicados por conta de sua estrategia de implementacao.
-		// O left joi eh necessario para recuperar os habitantes sem endereco.
-		return em.createQuery("select distinct h from Habitante h left join fetch h.enderecos", Habitante.class)
-				.getResultList();
-	}
-
-	/**
-	 * Insere o habitante no sistema
-	 * 
-	 * @param habitante
-	 * @return
-	 */
-	public Habitante save(Habitante habitante) {
-		// Realizando um merge pois os IDs dos habitantes sao enviados pela aplicacao
-		// que consome esse servico
-		return em.merge(habitante);
-	}
-
-	/**
 	 * Verifica se o habitante ja existe no sistema
 	 * 
 	 * @param codigo chave primaria do habitante
@@ -76,16 +79,14 @@ public class HabitanteRepository {
 	}
 
 	/**
-	 * Deleta o habitante cadastrado no sistema e seus respectivos enderecos atraves
-	 * de seu codigo
+	 * Insere o habitante no sistema
 	 * 
-	 * @param codigo chave primaria do habitante
+	 * @param habitante
+	 * @return
 	 */
-	public void deleteByCodigo(String codigo) {
-		// Removendo primeiramente os enderecos para que nao haja registros orfaos.
-		em.createQuery("delete from Endereco e where e.habitante.codigo =:codigo").setParameter("codigo", codigo)
-				.executeUpdate();
-		em.createQuery("delete from Habitante h where h.codigo =:codigo").setParameter("codigo", codigo)
-				.executeUpdate();
+	public Habitante save(Habitante habitante) {
+		// Realizando um merge pois os IDs dos habitantes sao enviados pela aplicacao
+		// que consome esse servico
+		return em.merge(habitante);
 	}
 }

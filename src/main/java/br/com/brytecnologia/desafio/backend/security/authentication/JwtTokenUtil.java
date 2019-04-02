@@ -15,72 +15,43 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenUtil {
 
-	static final String CLAIM_KEY_USERNAME = "sub";
-	static final String CLAIM_KEY_ROLE = "role";
 	static final String CLAIM_KEY_CREATED = "created";
-	static final String CLAIM_KEY_TYPE = "typ";
 	static final String CLAIM_KEY_ISSUE = "iss";
-
-	@Value("${jwt.secret}")
-	private String secret;
+	static final String CLAIM_KEY_ROLE = "role";
+	static final String CLAIM_KEY_TYPE = "typ";
+	static final String CLAIM_KEY_USERNAME = "sub";
 
 	@Value("${jwt.expiration}")
 	private Long expiration;
 
-	/**
-	 * Obtém o username (email) contido no token JWT.
-	 * 
-	 * @param token
-	 * @return String
-	 */
-	public String getUsernameFromToken(String token) {
-		String username;
-		try {
-			Claims claims = getClaimsFromToken(token);
-			username = claims.getSubject();
-		} catch (Exception e) {
-			username = null;
-		}
-		return username;
-	}
+	@Value("${jwt.secret}")
+	private String secret;
 
 	/**
-	 * Retorna a data de expiração de um token JWT.
+	 * Retorna a data de expiração com base na data atual.
 	 * 
-	 * @param token
 	 * @return Date
-	 * @throws JwtClaimExtractionException
 	 */
-	private Date getExpirationDateFromToken(String token) throws JwtClaimExtractionException {
-		return getClaimsFromToken(token).getExpiration();
+	private Date gerarDataExpiracao() {
+		return new Date(System.currentTimeMillis() + expiration * 1000);
 	}
 
 	/**
-	 * Cria um novo token (refresh).
+	 * Gera um novo token JWT contendo os dados (claims) fornecidos.
 	 * 
-	 * @param token
+	 * @param claims
 	 * @return String
 	 */
-	public String refreshToken(String token) {
-		String refreshedToken;
-		try {
-			Claims claims = getClaimsFromToken(token);
-			refreshedToken = gerarToken(claims.getSubject(), claims.get("role", String.class));
-		} catch (Exception e) {
-			refreshedToken = null;
-		}
-		return refreshedToken;
-	}
+	private String gerarToken(String email, String role) {
+		Map<String, Object> header = new HashMap<>();
+		header.put("typ", "JWT");
 
-	/**
-	 * Retorna um novo token JWT com base nos dados do usuários.
-	 * 
-	 * @param userDetails
-	 * @return String
-	 */
-	public String obterToken(UserDetails userDetails) {
-		final String role = userDetails.getAuthorities().iterator().next().getAuthority();
-		return gerarToken(userDetails.getUsername(), role);
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", role);
+		claims.put("iat", new Date());
+
+		return Jwts.builder().setHeader(header).setClaims(claims).setIssuer("teste-angular").setSubject(email)
+				.setExpiration(gerarDataExpiracao()).signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
 	/**
@@ -99,12 +70,31 @@ public class JwtTokenUtil {
 	}
 
 	/**
-	 * Retorna a data de expiração com base na data atual.
+	 * Retorna a data de expiração de um token JWT.
 	 * 
+	 * @param token
 	 * @return Date
+	 * @throws JwtClaimExtractionException
 	 */
-	private Date gerarDataExpiracao() {
-		return new Date(System.currentTimeMillis() + expiration * 1000);
+	private Date getExpirationDateFromToken(String token) throws JwtClaimExtractionException {
+		return getClaimsFromToken(token).getExpiration();
+	}
+
+	/**
+	 * Obtém o username (email) contido no token JWT.
+	 * 
+	 * @param token
+	 * @return String
+	 */
+	public String getUsernameFromToken(String token) {
+		String username;
+		try {
+			Claims claims = getClaimsFromToken(token);
+			username = claims.getSubject();
+		} catch (Exception e) {
+			username = null;
+		}
+		return username;
 	}
 
 	/**
@@ -128,21 +118,31 @@ public class JwtTokenUtil {
 	}
 
 	/**
-	 * Gera um novo token JWT contendo os dados (claims) fornecidos.
+	 * Retorna um novo token JWT com base nos dados do usuários.
 	 * 
-	 * @param claims
+	 * @param userDetails
 	 * @return String
 	 */
-	private String gerarToken(String email, String role) {
-		Map<String, Object> header = new HashMap<>();
-		header.put("typ", "JWT");
+	public String obterToken(UserDetails userDetails) {
+		final String role = userDetails.getAuthorities().iterator().next().getAuthority();
+		return gerarToken(userDetails.getUsername(), role);
+	}
 
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", role);
-		claims.put("iat", new Date());
-
-		return Jwts.builder().setHeader(header).setClaims(claims).setIssuer("teste-angular").setSubject(email)
-				.setExpiration(gerarDataExpiracao()).signWith(SignatureAlgorithm.HS512, secret).compact();
+	/**
+	 * Cria um novo token (refresh).
+	 * 
+	 * @param token
+	 * @return String
+	 */
+	public String refreshToken(String token) {
+		String refreshedToken;
+		try {
+			Claims claims = getClaimsFromToken(token);
+			refreshedToken = gerarToken(claims.getSubject(), claims.get("role", String.class));
+		} catch (Exception e) {
+			refreshedToken = null;
+		}
+		return refreshedToken;
 	}
 
 }

@@ -20,9 +20,9 @@ public class Login implements Serializable {
 	private static final long serialVersionUID = 306411570471828345L;
 
 	private Long id;
-	private String usuario;
-	private String senha;
 	private PerfilEnum perfil;
+	private String senha;
+	private String usuario;
 
 	public Login() {
 	}
@@ -33,27 +33,10 @@ public class Login implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	@Column(name = "usuario", nullable = false)
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "perfil", nullable = false)
 	public PerfilEnum getPerfil() {
 		return perfil;
-	}
-
-	public void setPerfil(PerfilEnum perfil) {
-		this.perfil = perfil;
 	}
 
 	@Column(name = "senha", nullable = false)
@@ -61,8 +44,25 @@ public class Login implements Serializable {
 		return senha;
 	}
 
+	@Column(name = "usuario", nullable = false)
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setPerfil(PerfilEnum perfil) {
+		this.perfil = perfil;
+	}
+
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 }

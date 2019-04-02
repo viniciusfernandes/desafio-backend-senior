@@ -17,53 +17,21 @@ public class Habitante implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5400464307826298516L;
-	private String nome;
-
 	@Id
 	private String codigo;
-
-	public Habitante() {
-	}
-
-	public Habitante(String codigo) {
-		this.codigo = codigo;
-	}
 
 	// O fetch type deve ser Lazy para se evitar carregamentos desnecessarios de
 	// dados, o que pode acarretar em lentidao do sistema
 	@OneToMany(mappedBy = "habitante", fetch = FetchType.LAZY)
 	private List<Endereco> enderecos;
 
-	public String getNome() {
-		return nome;
+	private String nome;
+
+	public Habitante() {
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
+	public Habitante(String codigo) {
 		this.codigo = codigo;
-	}
-
-	public List<Endereco> getEnderecos() {
-		return enderecos;
-	}
-
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
-	}
-
-	public boolean hasCodigo() {
-		return codigo != null && codigo.trim().length() > 0;
-	}
-
-	public boolean hasEndereco() {
-		return enderecos != null && !enderecos.isEmpty();
 	}
 
 	public void addEndereco(Endereco endereco) {
@@ -75,5 +43,37 @@ public class Habitante implements Serializable {
 
 	public void clearEnderecos() {
 		setEnderecos(new ArrayList<>());
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public boolean hasCodigo() {
+		return codigo != null && codigo.trim().length() > 0;
+	}
+
+	public boolean hasEndereco() {
+		return enderecos != null && !enderecos.isEmpty();
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 }

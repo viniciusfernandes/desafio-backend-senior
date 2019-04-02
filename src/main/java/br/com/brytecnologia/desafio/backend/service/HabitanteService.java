@@ -19,6 +19,14 @@ import br.com.brytecnologia.desafio.backend.service.exception.NoDataException;
 public interface HabitanteService {
 
 	/**
+	 * Deleta o habitante cadastrado no sistema e seus respectivos enderecos atraves
+	 * de seu codigo
+	 * 
+	 * @param codigo chave primaria do habitante
+	 */
+	void deleteByCodigo(String codigo) throws InvalidDataException;
+
+	/**
 	 * Pesquisa todos os habitantes do sistema.
 	 * 
 	 * @return lista contendo todos os habitantes do sistema.
@@ -35,6 +43,15 @@ public interface HabitanteService {
 	 *                         habitante com o codigo.
 	 */
 	Habitante findByCodigo(String codigo) throws NoDataException;
+
+	/**
+	 * Verifica se o habitante ja existe no sistema
+	 * 
+	 * @param codigo chave primaria do habitante
+	 * @return retorna true se o habitante ja esta cadastrado no sistema, e false no
+	 *         caso contrario
+	 */
+	boolean isCodigoExistente(String codigo);
 
 	/**
 	 * Metodo que executa todas as validacoes para a inclusao dos dados de um
@@ -57,23 +74,6 @@ public interface HabitanteService {
 	 */
 	Habitante save(Habitante habitante) throws BlanckDataException, ConflictDataException, InvalidDataException,
 			BadFormatDataException, NoDataException;
-
-	/**
-	 * Verifica se o habitante ja existe no sistema
-	 * 
-	 * @param codigo chave primaria do habitante
-	 * @return retorna true se o habitante ja esta cadastrado no sistema, e false no
-	 *         caso contrario
-	 */
-	boolean isCodigoExistente(String codigo);
-
-	/**
-	 * Deleta o habitante cadastrado no sistema e seus respectivos enderecos atraves
-	 * de seu codigo
-	 * 
-	 * @param codigo chave primaria do habitante
-	 */
-	void deleteByCodigo(String codigo) throws InvalidDataException;
 
 	/**
 	 * Metodo que executa todas as validacoes para a alteracao dos dados de um

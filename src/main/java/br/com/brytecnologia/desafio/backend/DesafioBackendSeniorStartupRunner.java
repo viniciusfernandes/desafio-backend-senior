@@ -22,14 +22,14 @@ import br.com.brytecnologia.desafio.backend.security.authentication.service.Logi
 @Component
 public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 
+	private Logger logger = LoggerFactory.getLogger(DesafioBackendSeniorStartupRunner.class);
+
 	private LoginService loginService;
 
 	@Autowired
 	public DesafioBackendSeniorStartupRunner(LoginService loginService) {
 		this.loginService = loginService;
 	}
-
-	private Logger logger = LoggerFactory.getLogger(DesafioBackendSeniorStartupRunner.class);
 
 	@Override
 	public void run(String... args) throws Exception {

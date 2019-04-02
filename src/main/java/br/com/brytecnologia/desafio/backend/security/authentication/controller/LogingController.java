@@ -30,13 +30,13 @@ import br.com.brytecnologia.desafio.backend.security.authentication.JwtTokenUtil
 @CrossOrigin
 public class LogingController {
 
-	private final Logger logger = LoggerFactory.getLogger(LogingController.class);
-
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+
+	private final Logger logger = LoggerFactory.getLogger(LogingController.class);
 
 	@Autowired
 	private UserDetailsService userDetailsService;

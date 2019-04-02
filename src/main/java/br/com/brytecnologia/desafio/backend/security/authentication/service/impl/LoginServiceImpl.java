@@ -17,7 +17,17 @@ public class LoginServiceImpl implements LoginService {
 	@Autowired
 	private LoginRepository loginRepository;
 
-	
+	@Transactional(readOnly = false)
+	@Override
+	public void deleteAll() {
+		loginRepository.deleteAll();
+	}
+
+	@Override
+	public List<Login> findAll() {
+		return loginRepository.findAll();
+	}
+
 	@Override
 	public Login findByUsuario(String usuario) {
 		if (usuario == null || usuario.trim().isEmpty()) {
@@ -30,18 +40,6 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public Long save(Login login) {
 		return loginRepository.save(login).getId();
-	}
-	
-
-	@Transactional(readOnly = false)
-	@Override
-	public void deleteAll() {
-		loginRepository.deleteAll();
-	}
-	
-	@Override
-	public List<Login> findAll(){
-		return loginRepository.findAll();
 	}
 
 }

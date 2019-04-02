@@ -24,6 +24,16 @@ public interface EnderecoService {
 	Endereco findByCodigoPostal(String codigoPostal);
 
 	/**
+	 * Metodo que verifica de um codigo postal esta dentro dos padroes
+	 * convencionados de 8 digitos.
+	 * 
+	 * @param codigoPostal codigo postal do endereco.
+	 * @return retorna true se o codigo postal esta dentro dos padroes ou false no
+	 *         caso contrario.
+	 */
+	boolean isCodigoPostalValido(String codigoPostal);
+
+	/**
 	 * Metodo que popula o objeto endereco com os dados recuperados de uma consulta
 	 * ao servico de CEP a partir de seu codigo postal.
 	 * 
@@ -55,14 +65,4 @@ public interface EnderecoService {
 	 *                                nao esteja cadastrado no servico de CEP.
 	 */
 	Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException, NoDataException;
-
-	/**
-	 * Metodo que verifica de um codigo postal esta dentro dos padroes
-	 * convencionados de 8 digitos.
-	 * 
-	 * @param codigoPostal codigo postal do endereco.
-	 * @return retorna true se o codigo postal esta dentro dos padroes ou false no
-	 *         caso contrario.
-	 */
-	boolean isCodigoPostalValido(String codigoPostal);
 }

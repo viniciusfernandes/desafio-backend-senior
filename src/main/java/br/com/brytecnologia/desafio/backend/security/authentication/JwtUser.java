@@ -9,10 +9,10 @@ public class JwtUser implements UserDetails {
 
 	private static final long serialVersionUID = -268046329085485932L;
 
-	private Long id;
-	private String username;
-	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
+	private Long id;
+	private String password;
+	private String username;
 
 	public JwtUser(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
@@ -21,8 +21,18 @@ public class JwtUser implements UserDetails {
 		this.authorities = authorities;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
 	public Long getId() {
 		return id;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
 	}
 
 	@Override
@@ -43,16 +53,6 @@ public class JwtUser implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
-	}
-
-	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
 	}
 
 	@Override

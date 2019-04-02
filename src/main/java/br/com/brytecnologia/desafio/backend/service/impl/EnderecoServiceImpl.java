@@ -65,6 +65,15 @@ public class EnderecoServiceImpl implements EnderecoService {
 	 * 
 	 */
 	@Override
+	public boolean isCodigoPostalValido(String codigoPostal) {
+		return codigoPostal != null && codigoPostal.matches("\\d{8}");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
 	public Endereco populateEndereco(Endereco enderecoHabitante) throws BlanckDataException, NoDataException {
 		if (enderecoHabitante == null || !enderecoHabitante.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal eh obrigatorio para o preenchimento do endereco");
@@ -103,15 +112,6 @@ public class EnderecoServiceImpl implements EnderecoService {
 		endereco = populateEndereco(endereco);
 
 		return enderecoRepository.save(endereco);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public boolean isCodigoPostalValido(String codigoPostal) {
-		return codigoPostal != null && codigoPostal.matches("\\d{8}");
 	}
 
 }

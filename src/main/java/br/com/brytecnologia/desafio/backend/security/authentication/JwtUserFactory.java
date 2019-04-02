@@ -11,9 +11,6 @@ import br.com.brytecnologia.desafio.backend.security.authentication.enums.Perfil
 
 public class JwtUserFactory {
 
-	private JwtUserFactory() {
-	}
-
 	public static JwtUser gerarJwtUser(Login login) {
 		return new JwtUser(login.getId(), login.getUsuario(), login.getSenha(),
 				getGrantedAuthorities(login.getPerfil()));
@@ -23,5 +20,8 @@ public class JwtUserFactory {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(perfilEnum.toString()));
 		return authorities;
+	}
+
+	private JwtUserFactory() {
 	}
 }
