@@ -28,7 +28,7 @@ public class HabitanteRepository {
 	}
 
 	public List<Habitante> findAll() {
-		return em.createQuery("select h from Habitante h left join fetch h.enderecos", Habitante.class).getResultList();
+		return em.createQuery("select distinct h from Habitante h left join fetch h.enderecos", Habitante.class).getResultList();
 	}
 
 	public Habitante save(Habitante habitante) {
