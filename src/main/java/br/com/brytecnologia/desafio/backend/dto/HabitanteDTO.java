@@ -3,6 +3,13 @@ package br.com.brytecnologia.desafio.backend.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe utilizada para encapsular os dados envolvidos no trafego de informacao
+ * entre o a camada de controller e a de servico.
+ * 
+ * @author vinic
+ *
+ */
 public class HabitanteDTO {
 	private String nome;
 

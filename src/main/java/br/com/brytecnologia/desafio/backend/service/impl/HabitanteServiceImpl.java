@@ -34,6 +34,11 @@ public class HabitanteServiceImpl implements HabitanteService {
 
 	private EnderecoService enderecoService;
 
+	/*
+	 * Uma boa pratica eh efetuar a injecao de dependencias via construtor ao inves
+	 * de injecao no atributo. Assim podemos identificar os pontos de dependencia
+	 * ciclica.
+	 */
 	@Autowired
 	public HabitanteServiceImpl(EnderecoService enderecoService, HabitanteRepository habitanteRepository) {
 		this.enderecoService = enderecoService;
@@ -52,21 +57,28 @@ public class HabitanteServiceImpl implements HabitanteService {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @throws NoDataException
+	 * 
 	 */
 	@Override
-	public Habitante findByCodigo(String codigo) {
-		return habitanteRepository.findByCodigo(codigo);
+	public Habitante findByCodigo(String codigo) throws NoDataException {
+		Habitante habitante = habitanteRepository.findByCodigo(codigo);
+		if (habitante == null) {
+			throw new NoDataException("Nao existe habitante com o codigo " + codigo);
+		}
+		return habitante;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @throws NoDataException 
+	 * 
+	 * @throws NoDataException
 	 * 
 	 */
 	@Override
 	@Transactional(readOnly = false)
-	public Habitante save(Habitante habitante)
-			throws BlanckDataException, ConflictDataException, InvalidDataException, BadFormatDataException, NoDataException {
+	public Habitante save(Habitante habitante) throws BlanckDataException, ConflictDataException, InvalidDataException,
+			BadFormatDataException, NoDataException {
 
 		validate(habitante);
 		if (isCodigoExistente(habitante.getCodigo())) {
@@ -125,6 +137,7 @@ public class HabitanteServiceImpl implements HabitanteService {
 
 	private Habitante saveOrUpdate(Habitante habitante)
 			throws BlanckDataException, BadFormatDataException, InvalidDataException, NoDataException {
+		// Primeiro inserindo o habitante para depois inserir suas dependecias.
 		habitanteRepository.save(habitante);
 		if (habitante.hasEndereco()) {
 			List<Endereco> enderecos = new ArrayList<>();

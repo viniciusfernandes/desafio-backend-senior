@@ -2,6 +2,13 @@ package br.com.brytecnologia.desafio.backend.dto;
 
 import java.io.Serializable;
 
+/**
+ * Classe utilizada para encapsular os dados envolvidos no trafego de informacao
+ * entre o a camada de controller e a de servico.
+ * 
+ * @author vinic
+ *
+ */
 public class EnderecoDTO implements Serializable {
 
 	/**

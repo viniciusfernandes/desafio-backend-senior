@@ -40,8 +40,12 @@ public class HabitanteController {
 
 	private HabitanteService habitanteService;
 
+	/*
+	 * Uma boa pratica eh efetuar a injecao de dependencias via construtor ao inves
+	 * de injecao no atributo. Assim podemos identificar os pontos de dependencia
+	 * ciclica.
+	 */
 	@Autowired
-
 	public HabitanteController(HabitanteService habitanteService) {
 		this.habitanteService = habitanteService;
 	}
@@ -75,7 +79,7 @@ public class HabitanteController {
 			return new ResponseEntity<HabitanteDTO>(dto, headers, HttpStatus.CREATED);
 		} catch (ConflictDataException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.CONFLICT);
-		} catch (BlanckDataException | BadFormatDataException | InvalidDataException e) {
+		} catch (BlanckDataException | BadFormatDataException | InvalidDataException | NoDataException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.BAD_REQUEST);
 		} catch (ClientServiceException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.SERVICE_UNAVAILABLE);
@@ -113,7 +117,11 @@ public class HabitanteController {
 	}
 
 	private HabitanteDTO convert(Habitante habitante) {
+		if (habitante == null) {
+			return null;
+		}
 		HabitanteDTO habitanteDto = new HabitanteDTO();
+
 		EntityUtils.copy(habitante, habitanteDto);
 
 		if (habitante.hasEndereco()) {

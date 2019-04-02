@@ -28,7 +28,8 @@ public interface EnderecoService {
 	 * ao servico de CEP a partir de seu codigo postal.
 	 * 
 	 * @param endereco objeto para ser populado pelo servico de CEP
-	 * @return
+	 * @return retorna o endereco populado com os dados consultados no servico de
+	 *         CEP.
 	 * @throws BlanckDataException excecao lancada no caso em que o codigo postal
 	 *                             esteja em branco.
 	 * @throws NoDataException     excecao lancada no caso em que o codigo postal

@@ -28,6 +28,11 @@ import br.com.brytecnologia.desafio.backend.service.exception.NoDataException;
 public class EnderecoServiceImpl implements EnderecoService {
 	private EnderecoRepository enderecoRepository;
 
+	/*
+	 * Uma boa pratica eh efetuar a injecao de dependencias via construtor ao inves
+	 * de injecao no atributo. Assim podemos identificar os pontos de dependencia
+	 * ciclica.
+	 */
 	@Autowired
 	public EnderecoServiceImpl(EnderecoRepository enderecoRepository) {
 		this.enderecoRepository = enderecoRepository;
@@ -87,9 +92,6 @@ public class EnderecoServiceImpl implements EnderecoService {
 	@Override
 	@Transactional(readOnly = false)
 	public Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException, NoDataException {
-
-		endereco = populateEndereco(endereco);
-
 		if (endereco == null || !endereco.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal do endereco nao pode estar em branco.");
 		} else if (!isCodigoPostalValido(endereco.getCodigoPostal())) {
@@ -98,6 +100,8 @@ public class EnderecoServiceImpl implements EnderecoService {
 							+ endereco.getCodigoPostal());
 
 		}
+		endereco = populateEndereco(endereco);
+
 		return enderecoRepository.save(endereco);
 	}
 
