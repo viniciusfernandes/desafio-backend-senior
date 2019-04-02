@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.brytecnologia.desafio.backend.dto.EnderecoDTO;
 import br.com.brytecnologia.desafio.backend.dto.HabitanteDTO;
@@ -64,8 +67,11 @@ public class HabitanteController {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<HabitanteDTO> save(@RequestBody HabitanteDTO habitanteDto) {
 		try {
+
 			HabitanteDTO dto = convert(habitanteService.save(convert(habitanteDto)));
-			return new ResponseEntity<HabitanteDTO>(dto, HttpStatus.CREATED);
+			HttpHeaders headers = configHeaderLocation(dto);
+
+			return new ResponseEntity<HabitanteDTO>(dto, headers, HttpStatus.CREATED);
 		} catch (ConflictDataException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.CONFLICT);
 		} catch (BlanckDataException | BadFormatDataException | InvalidDataException e) {
@@ -144,6 +150,14 @@ public class HabitanteController {
 		}
 
 		return habitante;
+	}
+
+	private HttpHeaders configHeaderLocation(HabitanteDTO habitanteDto) {
+		UriComponents uriComponents = UriComponentsBuilder.fromPath("/habitantes/{codigo}")
+				.buildAndExpand(habitanteDto == null ? "" : habitanteDto.getCodigo());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriComponents.toUri());
+		return headers;
 	}
 
 }
