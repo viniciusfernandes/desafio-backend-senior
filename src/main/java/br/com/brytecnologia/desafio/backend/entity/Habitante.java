@@ -29,6 +29,8 @@ public class Habitante implements Serializable {
 		this.codigo = codigo;
 	}
 
+	// O fetch type deve ser Lazy para se evitar carregamentos desnecessarios de
+	// dados, o que pode acarretar em lentidao do sistema
 	@OneToMany(mappedBy = "habitante", fetch = FetchType.LAZY)
 	private List<Endereco> enderecos;
 

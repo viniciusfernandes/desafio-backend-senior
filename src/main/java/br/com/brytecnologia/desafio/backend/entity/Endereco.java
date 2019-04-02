@@ -24,6 +24,8 @@ public class Endereco implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	// O fetch type deve ser Lazy para se evitar carregamentos desnecessarios de
+	// dados, o que pode acarretar em lentidao do sistema
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "codigo_habitante", referencedColumnName = "codigo", nullable = false)
 	private Habitante habitante;

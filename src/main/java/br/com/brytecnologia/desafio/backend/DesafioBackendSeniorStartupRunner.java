@@ -12,6 +12,13 @@ import br.com.brytecnologia.desafio.backend.security.authentication.entity.Login
 import br.com.brytecnologia.desafio.backend.security.authentication.enums.PerfilEnum;
 import br.com.brytecnologia.desafio.backend.security.authentication.service.LoginService;
 
+/**
+ * Classe responsavel por efetuar a leitura e o carregamento das informacoes dos
+ * usuarios na inicializacao da aplicacao.
+ * 
+ * @author vinic
+ *
+ */
 @Component
 public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 
@@ -28,6 +35,9 @@ public class DesafioBackendSeniorStartupRunner implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		loginService.deleteAll();
 
+		// Efetuando a leitura do arquivo dos usuarios para posteriormente inserir os
+		// dados no DB. Essa estrategia permite que, ao se remover o arquivo
+		// usuarios.properties, o sistema nao necessite de qualquer outra alteracao.
 		Properties prop = new Properties();
 		prop.load(this.getClass().getClassLoader().getResourceAsStream("usuarios.properties"));
 
