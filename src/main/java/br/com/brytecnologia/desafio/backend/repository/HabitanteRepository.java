@@ -79,10 +79,10 @@ public class HabitanteRepository {
 	}
 
 	/**
-	 * Insere o habitante no sistema
+	 * Insere os dados do habitante no sistema
 	 * 
-	 * @param habitante
-	 * @return
+	 * @param habitante dados do habitante
+	 * @return retorna o habitante inserido no sistema.
 	 */
 	public Habitante save(Habitante habitante) {
 		// Realizando um merge pois os IDs dos habitantes sao enviados pela aplicacao
