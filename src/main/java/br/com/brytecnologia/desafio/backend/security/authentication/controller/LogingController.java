@@ -26,11 +26,11 @@ import br.com.brytecnologia.desafio.backend.security.authentication.JwtToken;
 import br.com.brytecnologia.desafio.backend.security.authentication.JwtTokenUtil;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/login")
 @CrossOrigin
-public class AuthenticationController {
+public class LogingController {
 
-	private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+	private final Logger logger = LoggerFactory.getLogger(LogingController.class);
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
