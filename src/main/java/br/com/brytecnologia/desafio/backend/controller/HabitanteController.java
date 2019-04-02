@@ -55,12 +55,13 @@ public class HabitanteController {
 	@GetMapping("/{codigo}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'READONLY')")
 	public ResponseEntity<HabitanteDTO> findByCodigo(@PathVariable String codigo) {
-		Habitante habitante = habitanteService.findByCodigo(codigo);
-		if (habitante != null) {
-			return new ResponseEntity<HabitanteDTO>(convert(habitante), HttpStatus.OK);
-		} else {
+		try {
+			HabitanteDTO dto = convert(habitanteService.findByCodigo(codigo));
+			return new ResponseEntity<HabitanteDTO>(dto, HttpStatus.OK);
+		} catch (NoDataException e) {
 			return new ResponseEntity<HabitanteDTO>(HttpStatus.NOT_FOUND);
 		}
+
 	}
 
 	@PostMapping("")

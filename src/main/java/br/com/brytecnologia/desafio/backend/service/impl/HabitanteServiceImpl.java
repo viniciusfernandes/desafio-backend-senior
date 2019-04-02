@@ -18,6 +18,14 @@ import br.com.brytecnologia.desafio.backend.service.exception.ConflictDataExcept
 import br.com.brytecnologia.desafio.backend.service.exception.InvalidDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.NoDataException;
 
+/**
+ * Classe responsavel pela implementacao de todas as regras de negocio
+ * associadas a inclusao, recuperacao, alteracao e remocao dos dados dos
+ * habitantes no sistema.
+ * 
+ * @author vinic
+ *
+ */
 @Service
 @Transactional(readOnly = true, rollbackFor = { Exception.class })
 public class HabitanteServiceImpl implements HabitanteService {
@@ -32,16 +40,28 @@ public class HabitanteServiceImpl implements HabitanteService {
 		this.habitanteRepository = habitanteRepository;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	public List<Habitante> findAll() {
 		return habitanteRepository.findAll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	public Habitante findByCodigo(String codigo) {
 		return habitanteRepository.findByCodigo(codigo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	@Transactional(readOnly = false)
 	public Habitante save(Habitante habitante)
@@ -54,6 +74,10 @@ public class HabitanteServiceImpl implements HabitanteService {
 		return saveOrUpdate(habitante);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	@Transactional(readOnly = false)
 	public Habitante update(Habitante habitante)
@@ -65,6 +89,10 @@ public class HabitanteServiceImpl implements HabitanteService {
 		return saveOrUpdate(habitante);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	public boolean isCodigoExistente(String codigo) {
 		if (codigo == null || codigo.trim().length() <= 0) {
@@ -73,6 +101,10 @@ public class HabitanteServiceImpl implements HabitanteService {
 		return habitanteRepository.isCodigoExistente(codigo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	@Transactional(readOnly = false)
 	public void deleteByCodigo(String codigo) throws InvalidDataException {
