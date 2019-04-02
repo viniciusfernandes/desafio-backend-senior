@@ -14,8 +14,15 @@ import br.com.brytecnologia.desafio.backend.service.EnderecoService;
 import br.com.brytecnologia.desafio.backend.service.exception.BadFormatDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.BlanckDataException;
 import br.com.brytecnologia.desafio.backend.service.exception.ClientServiceException;
-import br.com.brytecnologia.desafio.backend.service.exception.InvalidDataException;
+import br.com.brytecnologia.desafio.backend.service.exception.NoDataException;
 
+/**
+ * Classe que implementa todas as validacoes e regras de negocios aplicadas aos
+ * dados dos enderecos do sistema.
+ * 
+ * @author vinic
+ *
+ */
 @Service
 @Transactional(readOnly = true)
 public class EnderecoServiceImpl implements EnderecoService {
@@ -26,6 +33,10 @@ public class EnderecoServiceImpl implements EnderecoService {
 		this.enderecoRepository = enderecoRepository;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	public Endereco findByCodigoPostal(String codigoPostal) {
 		Map<String, String> params = new HashMap<>();
@@ -44,20 +55,19 @@ public class EnderecoServiceImpl implements EnderecoService {
 		return endereco;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
-	public Endereco populateEndereco(Endereco enderecoHabitante) throws BlanckDataException, InvalidDataException {
+	public Endereco populateEndereco(Endereco enderecoHabitante) throws BlanckDataException, NoDataException {
 		if (enderecoHabitante == null || !enderecoHabitante.hasCodigoPostal()) {
 			throw new BlanckDataException("O codigo postal eh obrigatorio para o preenchimento do endereco");
-		} else if (!isCodigoPostalValido(enderecoHabitante.getCodigoPostal())) {
-			throw new InvalidDataException(
-					"O codigo postal do endereco deve conter oito digitos numericos no padrao 99999999, mas foi enviado "
-							+ enderecoHabitante.getCodigoPostal());
-
 		}
 
 		Endereco endereco = findByCodigoPostal(enderecoHabitante.getCodigoPostal());
 		if (endereco == null) {
-			throw new InvalidDataException(
+			throw new NoDataException(
 					"Nao existe endereco para o codigo postal " + enderecoHabitante.getCodigoPostal());
 		}
 
@@ -70,9 +80,13 @@ public class EnderecoServiceImpl implements EnderecoService {
 		return enderecoHabitante;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	@Transactional(readOnly = false)
-	public Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException, InvalidDataException {
+	public Endereco save(Endereco endereco) throws BlanckDataException, BadFormatDataException, NoDataException {
 
 		endereco = populateEndereco(endereco);
 
@@ -87,6 +101,11 @@ public class EnderecoServiceImpl implements EnderecoService {
 		return enderecoRepository.save(endereco);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
 	public boolean isCodigoPostalValido(String codigoPostal) {
 		return codigoPostal != null && codigoPostal.matches("\\d{8}");
 	}

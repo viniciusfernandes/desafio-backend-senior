@@ -60,12 +60,13 @@ public class HabitanteServiceImpl implements HabitanteService {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws NoDataException 
 	 * 
 	 */
 	@Override
 	@Transactional(readOnly = false)
 	public Habitante save(Habitante habitante)
-			throws BlanckDataException, ConflictDataException, InvalidDataException, BadFormatDataException {
+			throws BlanckDataException, ConflictDataException, InvalidDataException, BadFormatDataException, NoDataException {
 
 		validate(habitante);
 		if (isCodigoExistente(habitante.getCodigo())) {
@@ -123,7 +124,7 @@ public class HabitanteServiceImpl implements HabitanteService {
 	}
 
 	private Habitante saveOrUpdate(Habitante habitante)
-			throws BlanckDataException, BadFormatDataException, InvalidDataException {
+			throws BlanckDataException, BadFormatDataException, InvalidDataException, NoDataException {
 		habitanteRepository.save(habitante);
 		if (habitante.hasEndereco()) {
 			List<Endereco> enderecos = new ArrayList<>();
